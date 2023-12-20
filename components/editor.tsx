@@ -18,11 +18,11 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
 	const { edgestore } = useEdgeStore();
 
 	const handleUpload = async (file: File) => {
-		const res = await edgestore.publicFiles.upload({
+		const response = await edgestore.publicFiles.upload({
 			file,
 		});
 
-		return res.url;
+		return response.url;
 	};
 
 	const editor: BlockNoteEditor = useBlockNote({
@@ -30,17 +30,19 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
 		initialContent: initialContent
 			? (JSON.parse(initialContent) as PartialBlock[])
 			: undefined,
-		onEditorContentChange: (editor) => {
+		onEditorContentChange: (editor: any) => {
 			onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
 		},
 		uploadFile: handleUpload,
 	});
 
 	return (
-		<BlockNoteView
-			editor={editor}
-			theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
-		/>
+		<div>
+			<BlockNoteView
+				editor={editor}
+				theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+			/>
+		</div>
 	);
 };
 
